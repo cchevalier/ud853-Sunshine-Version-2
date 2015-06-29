@@ -211,9 +211,12 @@ public class ForecastFragment extends Fragment {
         protected void onPostExecute(String[] result) {
             if (result != null) {
                 mForecastAdapter.clear();
+
                 for (String dayForecast : result) {
                     mForecastAdapter.add(dayForecast);
                 }
+                // The Following would work for API >= 11
+//                mForecastAdapter.addAll(result);
             }
         }
 
