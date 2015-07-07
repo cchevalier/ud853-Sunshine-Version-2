@@ -74,7 +74,7 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // fake data
+        // Some fake data set as a list weekForecast
         String[] data = {
                 "Mon 6/23 - Sunny - 31/17",
                 "Tue 6/24 - Foggy - 21/8",
@@ -93,19 +93,35 @@ public class ForecastFragment extends Fragment {
         // Find listView in hierarchy
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
 
-        // Create ArrayAdapter binding data and associated view (
+        // Create ArrayAdapter binding data and associated view - Array weekForecast version
         mForecastAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 R.layout.list_item_forecast2,
                 R.id.list_item_forecast_textview,
                 weekForecast);
 
-        // Set Adapter
+/*
+        // Create ArrayAdapter binding data and associated view - String data version
+        //
+        //      This version crashes when using Refresh !!!
+        //
+        mForecastAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                R.layout.list_item_forecast2,
+                R.id.list_item_forecast_textview,
+                data
+        );
+*/
+
+        // Set Adapter for listView
         listView.setAdapter(mForecastAdapter);
 
+        // Click Handling on listView items via Listener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                // Simple Toast version
                 String forecast = mForecastAdapter.getItem(i);
                 Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
             }
@@ -194,7 +210,7 @@ public class ForecastFragment extends Fragment {
                 // If the code didn't successfully get the weather data, there's no point in attempting
                 // to parse it.
                 return null;
-            } finally{
+            } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
                 }
@@ -210,7 +226,7 @@ public class ForecastFragment extends Fragment {
             try {
                 return getWeatherDataFromJson(forecastJsonStr, numDays);
             } catch (JSONException e) {
-                Log.e(LOG_TAG,e.getMessage(), e );
+                Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
             }
 
@@ -230,10 +246,11 @@ public class ForecastFragment extends Fragment {
             }
         }
 
-        /* The date/time conversion code is going to be moved outside the asynctask later,
-                 * so for convenience we're breaking it out into its own method now.
-                 */
-        private String getReadableDateString(long time){
+        /**
+         * The date/time conversion code is going to be moved outside the asynctask later,
+         * so for convenience we're breaking it out into its own method now.
+         */
+        private String getReadableDateString(long time) {
             // Because the API returns a unix timestamp (measured in seconds),
             // it must be converted to milliseconds in order to be converted to valid date.
             SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
@@ -257,7 +274,7 @@ public class ForecastFragment extends Fragment {
         /**
          * Take the String representing the complete forecast in JSON Format and
          * pull out the data we need to construct the Strings needed for the wireframes.
-         *
+         * <p/>
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
          */
@@ -293,7 +310,7 @@ public class ForecastFragment extends Fragment {
             dayTime = new Time();
 
             String[] resultStrs = new String[numDays];
-            for(int i = 0; i < weatherArray.length(); i++) {
+            for (int i = 0; i < weatherArray.length(); i++) {
                 // For now, using the format "Day, description, hi/low"
                 String day;
                 String description;
@@ -307,7 +324,7 @@ public class ForecastFragment extends Fragment {
                 // "this saturday".
                 long dateTime;
                 // Cheating to convert this to UTC time, which is what we want anyhow
-                dateTime = dayTime.setJulianDay(julianStartDay+i);
+                dateTime = dayTime.setJulianDay(julianStartDay + i);
                 day = getReadableDateString(dateTime);
 
                 // description is in a child array called "weather", which is 1 element long.
