@@ -109,8 +109,7 @@ public class ForecastFragment extends Fragment {
                 getActivity(),
                 R.layout.list_item_forecast2,
                 R.id.list_item_forecast_textview,
-                data
-        );
+                data);
 */
 
         // Set Adapter for listView
